@@ -37,8 +37,36 @@ export function listTodos(): Todo[] {
   return [...document.todos].sort((left, right) => left.order - right.order);
 }
 
-export function updateTodo(_id: string, _changes: UpdateTodoInput): Todo {
-  throw new Error('Not implemented');
+export function updateTodo(id: string, changes: UpdateTodoInput): Todo {
+  const document = loadTodoDocument();
+  const todoIndex = document.todos.findIndex((todo) => todo.id === id);
+
+  if (todoIndex === -1) {
+    throw new Error('Todo not found.');
+  }
+
+  const existingTodo = document.todos[todoIndex];
+  let nextText = existingTodo.text;
+
+  if (changes.text !== undefined) {
+    nextText = changes.text.trim();
+
+    if (nextText.length === 0) {
+      throw new Error('Todo text is required.');
+    }
+  }
+
+  const updatedTodo: Todo = {
+    ...existingTodo,
+    text: nextText,
+    updatedAt: getCurrentTimestamp(),
+  };
+
+  const todos = [...document.todos];
+  todos[todoIndex] = updatedTodo;
+  saveTodoDocument({ todos });
+
+  return updatedTodo;
 }
 
 export function completeTodo(_id: string): Todo {
