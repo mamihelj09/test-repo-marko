@@ -1,11 +1,34 @@
+import crypto from 'node:crypto';
+
+import { loadTodoDocument, saveTodoDocument } from './todo-storage';
 import type { AddTodoInput, Todo, UpdateTodoInput } from './todo-types';
 
-export function addTodo(_input: AddTodoInput): Todo {
-  throw new Error('Not implemented');
+function getCurrentTimestamp(): string {
+  return new Date().toISOString();
+}
+
+export function addTodo(input: AddTodoInput): Todo {
+  const document = loadTodoDocument();
+  const timestamp = getCurrentTimestamp();
+  const todo: Todo = {
+    id: crypto.randomUUID(),
+    text: input.text,
+    completed: false,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+    completedAt: null,
+    order: document.todos.length,
+  };
+
+  saveTodoDocument({ todos: [...document.todos, todo] });
+
+  return todo;
 }
 
 export function listTodos(): Todo[] {
-  throw new Error('Not implemented');
+  const document = loadTodoDocument();
+
+  return [...document.todos].sort((left, right) => left.order - right.order);
 }
 
 export function updateTodo(_id: string, _changes: UpdateTodoInput): Todo {
