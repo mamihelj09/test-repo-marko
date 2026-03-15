@@ -5,6 +5,7 @@ import path from 'node:path';
 import {
   addTodo,
   completeTodo,
+  deleteTodo,
   listTodos,
   updateTodo,
 } from '../src/todo-service';
@@ -98,5 +99,16 @@ describe('todo service create and list', () => {
 
   it('rejects completion when the todo id does not exist', () => {
     expect(() => completeTodo('missing-id')).toThrowError('Todo not found.');
+  });
+
+  it('deletes an existing todo and returns true', () => {
+    const created = addTodo({ text: 'remove me' });
+
+    expect(deleteTodo(created.id)).toBe(true);
+    expect(listTodos()).toEqual([]);
+  });
+
+  it('returns false when deleting a missing todo id', () => {
+    expect(deleteTodo('missing-id')).toBe(false);
   });
 });

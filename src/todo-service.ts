@@ -92,6 +92,15 @@ export function completeTodo(id: string): Todo {
   return completedTodo;
 }
 
-export function deleteTodo(_id: string): boolean {
-  throw new Error('Not implemented');
+export function deleteTodo(id: string): boolean {
+  const document = loadTodoDocument();
+  const todos = document.todos.filter((todo) => todo.id !== id);
+
+  if (todos.length === document.todos.length) {
+    return false;
+  }
+
+  saveTodoDocument({ todos });
+
+  return true;
 }
