@@ -34,7 +34,7 @@ describe('loadTodoDocument', () => {
 
     expect(loadTodoDocument()).toEqual(document);
     expect(fs.readFileSync(todoFilePath, 'utf8')).toBe(
-      `${JSON.stringify(document, null, 2)}\n`,
+      `${JSON.stringify(document, null, 2)}\n`
     );
   });
 });

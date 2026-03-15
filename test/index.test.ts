@@ -33,4 +33,16 @@ describe('public todo API behavior', () => {
 
     expect(listTodos()).toEqual([first, second]);
   });
+
+  it('supports add, update, complete, list, and delete through the public entrypoint', () => {
+    const created = addTodo({ text: 'draft docs' });
+    const updated = updateTodo(created.id, { text: 'publish docs' });
+    const completed = completeTodo(created.id);
+
+    expect(updated.text).toBe('publish docs');
+    expect(completed.completed).toBe(true);
+    expect(listTodos()).toEqual([completed]);
+    expect(deleteTodo(created.id)).toBe(true);
+    expect(listTodos()).toEqual([]);
+  });
 });

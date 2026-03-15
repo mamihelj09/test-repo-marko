@@ -40,7 +40,7 @@ describe('todo service create and list', () => {
 
   it('rejects adding a todo when text is empty after trimming', () => {
     expect(() => addTodo({ text: '   ' })).toThrowError(
-      'Todo text is required.',
+      'Todo text is required.'
     );
     expect(listTodos()).toEqual([]);
   });
@@ -65,7 +65,7 @@ describe('todo service create and list', () => {
 
   it('rejects update when the todo id does not exist', () => {
     expect(() => updateTodo('missing-id', { text: 'x' })).toThrowError(
-      'Todo not found.',
+      'Todo not found.'
     );
   });
 
@@ -73,7 +73,7 @@ describe('todo service create and list', () => {
     const created = addTodo({ text: 'keep me' });
 
     expect(() => updateTodo(created.id, { text: '   ' })).toThrowError(
-      'Todo text is required.',
+      'Todo text is required.'
     );
     expect(listTodos()).toEqual([created]);
   });
