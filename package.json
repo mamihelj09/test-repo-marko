@@ -4,7 +4,7 @@
   "description": "A TypeScript Node.js starter package.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --fileParallelism=false",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "format": "prettier --write .",
