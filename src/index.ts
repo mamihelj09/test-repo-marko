@@ -1,3 +1,9 @@
-export function createGreeting(): string {
-  return 'Hello from todo-app-test-2';
-}
+export {
+  addTodo,
+  completeTodo,
+  deleteTodo,
+  listTodos,
+  updateTodo,
+} from './todo-service';
+
+export type { AddTodoInput, Todo, UpdateTodoInput } from './todo-types';
