@@ -69,8 +69,27 @@ export function updateTodo(id: string, changes: UpdateTodoInput): Todo {
   return updatedTodo;
 }
 
-export function completeTodo(_id: string): Todo {
-  throw new Error('Not implemented');
+export function completeTodo(id: string): Todo {
+  const document = loadTodoDocument();
+  const todoIndex = document.todos.findIndex((todo) => todo.id === id);
+
+  if (todoIndex === -1) {
+    throw new Error('Todo not found.');
+  }
+
+  const timestamp = getCurrentTimestamp();
+  const completedTodo: Todo = {
+    ...document.todos[todoIndex],
+    completed: true,
+    updatedAt: timestamp,
+    completedAt: timestamp,
+  };
+
+  const todos = [...document.todos];
+  todos[todoIndex] = completedTodo;
+  saveTodoDocument({ todos });
+
+  return completedTodo;
 }
 
 export function deleteTodo(_id: string): boolean {

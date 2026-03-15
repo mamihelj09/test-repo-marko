@@ -2,7 +2,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { addTodo, listTodos, updateTodo } from '../src/todo-service';
+import {
+  addTodo,
+  completeTodo,
+  listTodos,
+  updateTodo,
+} from '../src/todo-service';
 
 const todoFilePath = path.join(process.cwd(), 'todos.json');
 
@@ -70,5 +75,28 @@ describe('todo service create and list', () => {
       'Todo text is required.',
     );
     expect(listTodos()).toEqual([created]);
+  });
+
+  it('marks a todo as completed and records completion time', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-03-15T10:00:00.000Z'));
+
+    const created = addTodo({ text: 'ship todo library' });
+
+    vi.setSystemTime(new Date('2026-03-15T10:10:00.000Z'));
+
+    const completed = completeTodo(created.id);
+
+    expect(completed).toEqual({
+      ...created,
+      completed: true,
+      updatedAt: '2026-03-15T10:10:00.000Z',
+      completedAt: '2026-03-15T10:10:00.000Z',
+    });
+    expect(listTodos()).toEqual([completed]);
+  });
+
+  it('rejects completion when the todo id does not exist', () => {
+    expect(() => completeTodo('missing-id')).toThrowError('Todo not found.');
   });
 });
