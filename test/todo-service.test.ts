@@ -31,4 +31,11 @@ describe('todo service create and list', () => {
 
     expect(listTodos()).toEqual([todo]);
   });
+
+  it('rejects adding a todo when text is empty after trimming', () => {
+    expect(() => addTodo({ text: '   ' })).toThrowError(
+      'Todo text is required.',
+    );
+    expect(listTodos()).toEqual([]);
+  });
 });

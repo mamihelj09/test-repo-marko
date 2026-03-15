@@ -8,11 +8,17 @@ function getCurrentTimestamp(): string {
 }
 
 export function addTodo(input: AddTodoInput): Todo {
+  const normalizedText = input.text.trim();
+
+  if (normalizedText.length === 0) {
+    throw new Error('Todo text is required.');
+  }
+
   const document = loadTodoDocument();
   const timestamp = getCurrentTimestamp();
   const todo: Todo = {
     id: crypto.randomUUID(),
-    text: input.text,
+    text: normalizedText,
     completed: false,
     createdAt: timestamp,
     updatedAt: timestamp,
